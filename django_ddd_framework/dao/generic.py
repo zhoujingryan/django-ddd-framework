@@ -18,7 +18,7 @@ class GenericDao(BaseDao):
         mapper_cls = entity.get_mapper_class()
         db_notation = mapper_cls.get_db_notation(MapType.GENERIC)
         model = apps.get_model(db_notation)
-        dao = entity.DAO
+        dao = EntityDAO(entity.__class__).create(entity)
         args = dao.to_dict()
         try:
             model.objects.create(**args)
@@ -30,7 +30,8 @@ class GenericDao(BaseDao):
         if not entities:
             return
         mapper_cls = entities[0].get_mapper_class()
-        daos = [e.DAO for e in entities]
+        entity_cls = entities[0].__class__
+        daos = [EntityDAO(entity_cls).create(e) for e in entities]
         db_notation = mapper_cls.get_db_notation(MapType.GENERIC)
         model = apps.get_model(db_notation)
         creates = []
@@ -45,7 +46,7 @@ class GenericDao(BaseDao):
     def update(cls, entity: EntityIns):
         mapper_cls = entity.get_mapper_class()
         pk_field = mapper_cls.get_primary_key()
-        dao = entity.DAO
+        dao = EntityDAO(entity.__class__).create(entity)
         args = dao.to_dict()
         args.pop(pk_field.name)
         db_notation = mapper_cls.get_db_notation(MapType.GENERIC)
@@ -72,7 +73,7 @@ class GenericDao(BaseDao):
         db_notation = mapper_cls.get_db_notation(MapType.GENERIC)
         columns = mapper_cls.get_column_names()
         model = apps.get_model(db_notation)
-        dao_dict = {e.pk: e.DAO for e in entities}
+        dao_dict = {e.pk: EntityDAO(entity_cls).create(e) for e in entities}
         updates = []
         fields = set()
         for ins in repo_entities:
