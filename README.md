@@ -1,0 +1,3 @@
+# Django DDD Framework
+
+### project in progress...

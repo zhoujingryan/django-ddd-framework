@@ -1,0 +1,14 @@
+[run]
+branch = True
+
+source =
+    django_ddd_framework
+
+omit =
+    */tests/*
+    django_ddd_framework/dao/base.py
+    django_ddd_framework/repository/base.py
+    django_ddd_framework/factory/base.py
+
+[report]
+    precision = 2
